@@ -11,6 +11,8 @@
             name: {
                 value: ""
             },
+            property: {value:"payload", required:true, validate: RED.validators.typedInput("propertyType")},
+            propertyType: { value:"msg" },
             func: {
                 value: ""
             }
@@ -20,6 +22,7 @@
         },
         oneditprepare: function() {
             var that = this;
+            $("#node-input-property").typedInput({default:this.propertyType||'msg',types:['msg','flow','global','jsonata']});
             this.editor = RED.editor.createEditor({
                 id: 'node-input-func-editor',
                 mode: 'ace/mode/javascript',
@@ -46,6 +49,8 @@
             }
             $("#node-input-func").val(this.editor.getValue());
             delete this.editor;
+            this.propertyType = $("#node-input-property").typedInput('type');
+            $("#node-input-propertyType").val(this.propertyType);
         },
         oneditresize: function(size) {
             var rows = $("#dialog-form>div:not(.node-text-editor-row)");
@@ -65,6 +70,11 @@
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-property">Property</label>
+        <input type="text" id="node-input-property" style="width: 100%"/>
+		<input type="hidden" id="node-input-propertyType"/>
     </div>
     <div class="form-row" style="margin-bottom: 0px;">
         <label for="node-input-func"><i class="fa fa-wrench"></i> JSON Schema</label>
